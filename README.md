@@ -8,11 +8,12 @@ The application consists of two parts:
   
 Tombolone and tomboloneweb communicate through dbus.
 
-See prerequisites.txt for software needed to run this application
-See screenshots in snapshots folder.
+See prerequisites.txt for software needed to run this application.
+
+See screenshots in snapshots/ folder.
 
 I will upload a complete SD image in a few days.
 
-Every suggest is welcome!
+Every hint is welcome!
 
 Regards
