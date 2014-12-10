@@ -1,0 +1,3 @@
+sudo apt-get install python-pip python-dbus python-gobject python-dev
+
+sudo pip install flask-bootstrap flask-wtf flup
