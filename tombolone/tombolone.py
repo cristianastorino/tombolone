@@ -31,7 +31,7 @@ class Tombolone(dbus.service.Object) :
     coloreVittoria = (255, 0, 255)
     dimensioneVittoria = 140
     estratti = []
-    img_path = '/home/pi/sfondo.png'
+    img_path = '/tombolone/backgrounds/sfondo.png'
     img = None
 
     def __init__(self):
@@ -65,12 +65,20 @@ class Tombolone(dbus.service.Object) :
 
         pygame.font.init()
 
+        pygame.mixer.init()
+
+        self.ambosound = pygame.mixer.Sound('/tombolone/sounds/1.ogg')
+        self.ternosound = pygame.mixer.Sound('/tombolone/sounds/2.ogg')
+        self.quaternasound = pygame.mixer.Sound('/tombolone/sounds/3.ogg')
+        self.cinquinasound = pygame.mixer.Sound('/tombolone/sounds/4.ogg')
+        self.tombolasound = pygame.mixer.Sound('/tombolone/sounds/5.ogg')
+
         pygame.mouse.set_visible(False)
 
         self.img = pygame.image.load(self.img_path)
 
-        self.fontTitolo = pygame.font.Font('/home/pi/MeriendaOne.ttf', self.dimensioneTestoTitolo)
-        self.fontVittoria = pygame.font.Font('/home/pi/courgette.ttf', self.dimensioneVittoria)
+        self.fontTitolo = pygame.font.Font('/tombolone/fonts/MeriendaOne.ttf', self.dimensioneTestoTitolo)
+        self.fontVittoria = pygame.font.Font('/tombolone/fonts/courgette.ttf', self.dimensioneVittoria)
 
         self.aggiornaTabellone()
 
@@ -151,7 +159,23 @@ class Tombolone(dbus.service.Object) :
         textpos.centery = self.altezza/2
         self.screen.blit(text,textpos)
         pygame.display.flip()
-        pygame.time.wait(5000)
+        if testo == "Ambo!":
+            self.ambosound.play()
+            pygame.time.wait(int(self.ambosound.get_length()*1000))
+        elif testo == "Terno!":
+            self.ternosound.play()
+            pygame.time.wait(int(self.ternosound.get_length()*1000))
+        elif testo == "Quaterna!":
+            self.quaternasound.play()
+            pygame.time.wait(int(self.quaternasound.get_length()*1000))
+        elif testo == "Cinquina!":
+            self.cinquinasound.play()
+            pygame.time.wait(int(self.cinquinasound.get_length()*1000))
+        elif testo == "Tombola!":
+            self.tombolasound.play()
+            pygame.time.wait(int(self.tombolasound.get_length()*1000))
+        else:
+            pygame.time.wait(5000)
         self.aggiornaTabellone()
 
     @dbus.service.method("it.parrocchiasangiacomobianchi.Interface", in_signature='', out_signature='ai')
