@@ -28,7 +28,7 @@ class Tombolone(dbus.service.Object) :
     coloreNumeriEstratti = (0, 0, 0)
     coloreNumeri = (0, 0, 255)
     coloreSfondo = (255, 255, 255)
-    coloreVittoria = (255, 0, 255)
+    coloreVittoria = (255, 255, 0)
     dimensioneVittoria = 140
     estratti = []
     img_path = '/tombolone/backgrounds/sfondo.png'
@@ -67,10 +67,10 @@ class Tombolone(dbus.service.Object) :
 
         pygame.mixer.init()
 
-        self.ambosound = pygame.mixer.Sound('/tombolone/sounds/1.ogg')
-        self.ternosound = pygame.mixer.Sound('/tombolone/sounds/2.ogg')
-        self.quaternasound = pygame.mixer.Sound('/tombolone/sounds/3.ogg')
-        self.cinquinasound = pygame.mixer.Sound('/tombolone/sounds/4.ogg')
+        self.estrattosound = pygame.mixer.Sound('/tombolone/sounds/1.ogg')
+        #self.ternosound = pygame.mixer.Sound('/tombolone/sounds/2.ogg')
+        self.premisound = pygame.mixer.Sound('/tombolone/sounds/3.ogg')
+        #self.cinquinasound = pygame.mixer.Sound('/tombolone/sounds/4.ogg')
         self.tombolasound = pygame.mixer.Sound('/tombolone/sounds/5.ogg')
 
         pygame.mouse.set_visible(False)
@@ -137,9 +137,33 @@ class Tombolone(dbus.service.Object) :
         num = int(num)
         if num not in self.estratti:
             self.estratti.append(num)
+            my_logger.debug("disegno il numero 1")
+            self.disegnaEstratto(num)
+            self.estrattosound.play()
+            my_logger.debug("disegno il numero 5")
+            pygame.time.wait(int(self.estrattosound.get_length()*1000))
+            my_logger.debug("disegno il numero 6")
         else:
             self.estratti.remove(num)
         self.aggiornaTabellone()
+
+    def disegnaEstratto(self, num):
+        my_logger.debug("disegno il numero 2")
+        #wood = (222,184,135)
+        wood = (205, 133, 63)
+        red = (255, 0, 0)
+        pygame.draw.circle(self.screen, wood, (self.larghezza/2,self.altezza/2), int(self.altezza/4), 0)
+        pygame.draw.circle(self.screen, self.coloreTitolo, (self.larghezza/2,self.altezza/2), int(self.altezza/4-5), 0)
+        pygame.draw.circle(self.screen, wood, (self.larghezza/2,self.altezza/2), int(self.altezza/4-20), 0)
+        my_logger.debug("disegno il numero 3")
+        numfont = pygame.font.Font(None, 220)
+        text = numfont.render(str(num), 1, self.coloreTitolo)
+        textpos = text.get_rect()
+        textpos.centerx = self.larghezza/2
+        textpos.centery = self.altezza/2
+        self.screen.blit(text,textpos)
+        my_logger.debug("disegno il numero 4")
+        pygame.display.flip()
 
     @dbus.service.method("it.parrocchiasangiacomobianchi.Interface", in_signature='', out_signature='')
     def ricominciaGioco(self):
@@ -160,17 +184,17 @@ class Tombolone(dbus.service.Object) :
         self.screen.blit(text,textpos)
         pygame.display.flip()
         if testo == "Ambo!":
-            self.ambosound.play()
-            pygame.time.wait(int(self.ambosound.get_length()*1000))
+            self.premisound.play()
+            pygame.time.wait(int(self.premisound.get_length()*1000))
         elif testo == "Terno!":
-            self.ternosound.play()
-            pygame.time.wait(int(self.ternosound.get_length()*1000))
+            self.premisound.play()
+            pygame.time.wait(int(self.premisound.get_length()*1000))
         elif testo == "Quaterna!":
-            self.quaternasound.play()
-            pygame.time.wait(int(self.quaternasound.get_length()*1000))
+            self.premisound.play()
+            pygame.time.wait(int(self.premisound.get_length()*1000))
         elif testo == "Cinquina!":
-            self.cinquinasound.play()
-            pygame.time.wait(int(self.cinquinasound.get_length()*1000))
+            self.premisound.play()
+            pygame.time.wait(int(self.premisound.get_length()*1000))
         elif testo == "Tombola!":
             self.tombolasound.play()
             pygame.time.wait(int(self.tombolasound.get_length()*1000))
